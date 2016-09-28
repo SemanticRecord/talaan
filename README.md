@@ -38,7 +38,7 @@ BusinessLogger logger = SemanticLogger.getLogger(BusinessLogger.class);
 logger.lookupInvoices(user, businessDate, company);
 ```
 
-The output will be the same as the preceding example but easier to maintain.
+The output will be the same as the preceding example.
 
 The advantages you get from such an approach are the following:
 
