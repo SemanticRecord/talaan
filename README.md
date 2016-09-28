@@ -11,13 +11,13 @@ An example of a typical unstructured log statement might look like the following
 Logger logger = LoggerFactory.getLogger(SampleLoggerInterface.class);
 String user = "Rick Grimes";
 LocalDate businessDate = LocalDate.of(2016, 7, 1);
-String company = "Alexandria, Inc.";
-logger.info("Looking up invoices for user {} for date {} in company {}", user, businessDate, company);
+String company = "Alexandria";
+logger.info("Looking up invoices for user {} on date {} in company {}", user, businessDate, company);
 // business logic to perform lookup
 ```
 Logged output will look like the following:
 ```console
-  INFO Looking up invoices for user Rick Grimes for date 2016-07-01 in company Alexandria, Inc.
+  INFO Looking up invoices for user Rick Grimes on date 2016-07-01 in company Alexandria.
 ```
 
 A semantic approach would make it more machine readable:
@@ -26,7 +26,7 @@ logger.info("event={}, user={}, businessDate={}, company={}", "lookupInvoices", 
 ```
 Output will be:
 ```console
-  INFO event=lookupInvoices, user=Rick Grimes, businessDate=2016-07-01, company=Alexandria, Inc.
+  INFO event=lookupInvoices, user=Rick Grimes, businessDate=2016-07-01, company=Alexandria.
 ```
 The preceding example makes logging statements consistent and easier to parse but we still end up with a bunch of strings scattered over our code base.  If we had an interface that we could call with strongly typed arguments then the logging statement and its parameters can be derived automatically.
 ```java
