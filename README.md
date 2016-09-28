@@ -3,7 +3,7 @@ Semantic logging in Java over SLF4J
 
 Build status: [![Build Status] (https://travis-ci.org/SemanticRecord/talaan.svg?branch=master)](https://travis-ci.org/SemanticRecord/talaan "Travis CI Build")
 
-Talaan is a simple wrapper for SLF4J based loggers which adds the ability to generate log statements by calling Java interface methods instead of having strings scattered throughout your codebase.  In addition, the library promotes sturctured, strongly-typed, semantic logging instead of the more common unstructured logging used in most projects.  Using semantic logging instead of unstructured logging helps your logs to be more easily consumed by tools such as Splunk.
+Talaan is a simple wrapper for SLF4J based loggers which adds the ability to generate log statements by calling Java interface methods instead of having strings scattered throughout your codebase.  In addition, the library promotes structured, strongly-typed, semantic logging instead of the more common unstructured logging used in most projects.  Using semantic logging instead of unstructured logging helps your logs to be more easily consumed by tools such as Splunk.
 
 An example of a typical unstructured log statement might look like the following:
 
