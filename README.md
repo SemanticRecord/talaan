@@ -8,7 +8,7 @@ Talaan is a simple wrapper for SLF4J based loggers which adds the ability to gen
 An example of a typical unstructured log statement might look like the following:
 
 ```java
-Logger logger = LoggerFactory.getLogger(SampleLoggerInterface.class);
+Logger logger = LoggerFactory.getLogger(YourClass.class);
 String user = "Rick Grimes";
 LocalDate businessDate = LocalDate.of(2016, 7, 1);
 String company = "Alexandria";
