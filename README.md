@@ -31,7 +31,7 @@ Output will be:
 The preceding example makes logging statements consistent and easier to parse but we still end up with a bunch of strings scattered over our code base.  If we had an interface that we could call with strongly typed arguments then the logging statement and its parameters can be derived automatically.
 ```java
 public interface BusinessLogger { 
-  void lookingInvoices(String user, LocalDate businessDate, String company);
+  void lookupInvoices(String user, LocalDate businessDate, String company);
 }
 
 BusinessLogger logger = SemanticLogger.getLogger(BusinessLogger.class);
