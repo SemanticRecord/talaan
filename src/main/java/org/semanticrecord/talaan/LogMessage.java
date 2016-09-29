@@ -23,11 +23,13 @@ public @interface LogMessage {
 	 */
 	String value() default "";
 
+	/**
+	 * Specifies the log level to use
+	 */
 	Level level() default Level.INFO;
 
 	/**
 	 * Allows for a specific message code to be applied to each message
 	 */
 	String code() default "";
-
 }

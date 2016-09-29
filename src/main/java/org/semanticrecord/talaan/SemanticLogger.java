@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -14,12 +15,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.semanticrecord.talaan.LogMessage.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Rex Sheridan
@@ -30,13 +29,23 @@ public class SemanticLogger {
 	public static final String LOG_PLACEHOLDER = "{}";
 	public static final String CODE_PARAM_DEFAULT = "code";
 	public static final String PAIR_FORMAT_DEFAULT = "%s=%s";
-	public static final String METHOD_DEFAULT = "event";
+	public static final String EVENT_DEFAULT = "event";
 	public static final String SEPARATOR_DEFAULT = ", ";
 
+	/**
+	 * Uses the logInterface class as the name of the logger.
+	 * @param logInterface to interface for which we will generate logging statements
+	 * @return a proxied implementation of logInterface which logs invocations 
+	 */
 	public static <T> T getLogger(Class<T> logInterface) {
 		return getLogger(logInterface, logInterface);
 	}
 
+	/**
+	 * @param logInterface
+	 * @param loggerName
+	 * @return
+	 */
 	public static <T> T getLogger(Class<T> logInterface, Class<?> loggerName) {
 		return getLogger(logInterface, loggerName.getName());
 	}
@@ -50,14 +59,18 @@ public class SemanticLogger {
 
 		Map<Method, InvocationHandler> methodMap = declaredMethodsList.stream()
 				.collect(Collectors.toMap(m -> m, m -> createHandler(log, m)));
-		InvocationHandler h = (Object proxy, Method m2, Object[] args) -> {
-			return methodMap.get(m2).invoke(proxy, m2, args);
-		};
-
+		InvocationHandler h = createDispatchingHandler(methodMap);
 
 		@SuppressWarnings("unchecked")
 		T proxy = (T) Proxy.newProxyInstance(classLoader, interfaces, h);
 		return proxy;
+	}
+
+	private static InvocationHandler createDispatchingHandler(Map<Method, InvocationHandler> methodMap) {
+		InvocationHandler h = (Object proxy, Method method, Object[] args) -> {
+			return methodMap.get(method).invoke(proxy, method, args);
+		};
+		return h;
 	}
 
 	@LogMessage
@@ -89,19 +102,18 @@ public class SemanticLogger {
 		}
 	}
 
-	private static String generateFormatString(String code, String methodName, List<Parameter> parametersList) {
+	private static String generateFormatString(String code, String eventName, List<Parameter> parametersList) {
+		List<String> allParts = new ArrayList<>();
 
-		Stream<String> codeStream = code.isEmpty() ? Stream.empty() : Stream.of(format(CODE_PARAM_DEFAULT, code));
-		Stream<String> formattedParams = parametersList.stream()
-		.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
-		.map(p -> format(p.getName(), LOG_PLACEHOLDER));
-
-		List<String> allParts =
-				Stream.concat(codeStream,
-				Stream.concat(
-						Stream.of(format(METHOD_DEFAULT, methodName)),
-						formattedParams))
-				.collect(Collectors.toList());
+		allParts.add(formatPair(EVENT_DEFAULT, eventName));
+		if(!code.isEmpty()) {
+			allParts.add(formatPair(CODE_PARAM_DEFAULT, code));
+		}
+		List<String> formattedParams = parametersList.stream()
+										.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
+										.map(p -> formatPair(p.getName(), LOG_PLACEHOLDER))
+										.collect(Collectors.toList());
+		allParts.addAll(formattedParams);
 
 		String logMessage = join(SEPARATOR_DEFAULT, allParts);
 		return logMessage;
@@ -120,21 +132,19 @@ public class SemanticLogger {
 		return builder.toString();
 	}
 
-	private static String format(Object o1, Object o2) {
+	private static String formatPair(Object o1, Object o2) {
 		String fmt = PAIR_FORMAT_DEFAULT;
 		return String.format(fmt, o1, o2);
 	}
 
 	private static BiConsumer<String, Object[]> getLevelMethod(final Logger log, Level level) {
-		BiConsumer<String, Object[]> biCons = null;
+		BiConsumer<String, Object[]> biCons = log::error;
 		if(level == Level.DEBUG) {
 			biCons = log::debug;
 		} else if(level == Level.INFO) {
 			biCons = log::info;
 		} else if(level == Level.WARN) {
 			biCons = log::warn;
-		} else {
-			biCons = log::error;
 		}
 		return biCons;
 	}

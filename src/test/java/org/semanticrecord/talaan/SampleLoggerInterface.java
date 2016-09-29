@@ -13,7 +13,7 @@ import com.google.common.base.Stopwatch;
 public interface SampleLoggerInterface {
 	void loggerCreated(Stopwatch elapsedTime);
 
-	void lookingUpInvoices(String user, LocalDate businessDate, String businessName);
+	void lookupInvoices(String user, LocalDate businessDate, String company);
 
 	void foundAccountInvoices(String user, long recordsRetrieved, Stopwatch elapsedTime);
 

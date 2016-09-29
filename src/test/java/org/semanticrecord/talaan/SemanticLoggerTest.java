@@ -1,13 +1,16 @@
 package org.semanticrecord.talaan;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 
@@ -24,29 +27,55 @@ import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 public class SemanticLoggerTest {
 
 	TestLogger testLogger = TestLoggerFactory.getTestLogger(SampleLoggerInterface.class);
+	SampleLoggerInterface logger = SemanticLogger.getLogger(SampleLoggerInterface.class);
+	
+	Stopwatch elapsedTime;
+	
+	@BeforeClass
+	public static void initClass() {
+		TestLoggerFactory.getInstance().setPrintLevel(Level.INFO);
+	}
+	
+	@Before
+	public void setup() {
+		elapsedTime = Stopwatch.createStarted();
+	}
+	
+	@After
+	public void teardown() {
+		testLogger.clearAll();
+	}
 
 	@Test
-	public void test() {
-		Stopwatch elapsedTime = Stopwatch.createStarted();
-		SampleLoggerInterface logger = SemanticLogger.getLogger(SampleLoggerInterface.class);
-
+	public void simpleLogEntry() {
 		logger.loggerCreated(elapsedTime.stop());
-		String msg = "event=loggerCreated, elapsedTime={}";
-
+	
 		assertSingleEvent(event -> {
+			
+			assertThat(event.getLevel()).isEqualTo(Level.INFO);
+			assertThat(event.getCreatingLogger().getName()).isEqualTo(SampleLoggerInterface.class.getName());
+			String msg = "event=loggerCreated, elapsedTime={}";
 			String eventMessage = event.getMessage();
-			assertThat(event.getLevel(), is(Level.INFO));
-			assertThat(event.getCreatingLogger().getName(), is(SampleLoggerInterface.class.getName()));
-			assertThat(eventMessage, is(msg));
+			assertThat(eventMessage).isEqualTo(msg);
 			ImmutableList<Object> args = event.getArguments();
-			assertThat(args.size(), is(1));
-			assertThat(args.get(0), is(elapsedTime));
+			assertThat(args.size()).isEqualTo(1);
+			assertThat(args.get(0)).isEqualTo(elapsedTime);
 		});
+	}
 
-		String user = "rex";
-		LocalDate businessDate = LocalDate.now();
+	@Test
+	public void variousCases() {
+		String user = "Rick Grimes";
+		LocalDate businessDate = LocalDate.of(2016, 7, 1);
 		String businessName = "ACME Corp";
-		logger.lookingUpInvoices(user, businessDate, businessName);
+		
+		logger.lookupInvoices(user, businessDate, businessName);
+		
+		assertSingleEvent(event -> {
+			String msg = "event=lookupInvoices, user={}, businessDate={}, company={}";
+			String eventMessage = event.getMessage();
+			assertThat(eventMessage).isEqualTo(msg);
+		});
 
 		elapsedTime.reset().start();
 		logger.foundAccountInvoices(user, 123, elapsedTime.stop());
@@ -54,24 +83,36 @@ public class SemanticLoggerTest {
 		elapsedTime.reset().start();
 		String invoiceTitle = "2016-07-01 Full Invoice";
 		logger.updatedInvoice(invoiceTitle, 456, 10, elapsedTime.stop());
+		testLogger.clear();
+	}
 
+	@Test
+	public void testThrowable() {
 		elapsedTime.reset().start();
+		RuntimeException ex = new RuntimeException("Expected exception message");
 		try {
-			throw new RuntimeException("Expected exception message");
+			throw ex;
 		} catch (Exception e) {
 			logger.problemSavingRecord(1, elapsedTime.stop(), e);
 		}
-		ImmutableList<LoggingEvent> allLoggingEvents = testLogger.getAllLoggingEvents();
-
-		allLoggingEvents.forEach(event -> System.out.println(event));
+		assertSingleEvent(event -> {
+			String msg = "event=problemSavingRecord, code=INVOICEAPP-1001, invoiceId={}, elapsedTime={}";
+			String eventMessage = event.getMessage();
+			assertThat(eventMessage).isEqualTo(msg);
+			
+			assertThat(event.getLevel()).isEqualTo(Level.ERROR);
+			
+			Optional<Throwable> throwableOpt = event.getThrowable();
+			assertThat(throwableOpt.isPresent()).isEqualTo(true);
+			assertThat(throwableOpt.get()).isEqualTo(ex);
+		});
 	}
 
 	private void assertSingleEvent(Consumer<LoggingEvent> consumer) {
 		ImmutableList<LoggingEvent> events = testLogger.getLoggingEvents();
-		assertThat(events.size(), is(1));
+		assertThat(events.size()).isEqualTo(1);
 		consumer.accept(events.get(0));
 		testLogger.clear();
-
 	}
 
 }
