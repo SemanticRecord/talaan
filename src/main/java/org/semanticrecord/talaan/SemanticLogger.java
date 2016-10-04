@@ -83,7 +83,7 @@ public class SemanticLogger {
 		String eventName = message.value().isEmpty() ? method.getName() : message.value();
 		Parameter[] parameters = method.getParameters();
 		List<Parameter> parametersList = Arrays.asList(parameters);
-		String logMessage = generateFormatString(message.code(), eventName, parametersList);
+		String logMessage = generateFormatString(eventName, message.code(), parametersList);
 		BiConsumer<String, Object[]> biCons = getLevelMethod(log, message.level());
 
 		InvocationHandler h = (Object proxy, Method m2, Object[] args) -> {
@@ -102,7 +102,7 @@ public class SemanticLogger {
 		}
 	}
 
-	private static String generateFormatString(String code, String eventName, List<Parameter> parametersList) {
+	private static String generateFormatString(String eventName, String code, List<Parameter> parametersList) {
 		List<String> allParts = new ArrayList<>();
 
 		allParts.add(formatPair(EVENT_DEFAULT, eventName));
