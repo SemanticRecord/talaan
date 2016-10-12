@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>org.semanticrecord</groupId>
 	<artifactId>talaan</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -49,6 +48,7 @@
 	</dependencies>
 	<organization>
 		<name>Semantic Record</name>
+		<url>http://www.semanticrecord.org</url>
 	</organization>
 	<inceptionYear>2016</inceptionYear>
 	<licenses>
@@ -65,8 +65,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<compilerArgs>
 						<arg>-parameters</arg>
 					</compilerArgs>
@@ -75,4 +75,15 @@
 		</plugins>
 	</build>
 
+	<scm>
+		<developerConnection>scm:git:git@github.com:SemanticRecord/talaan.git</developerConnection>
+		<connection>scm:git:git://github.com/SemanticRecord/talaan.git</connection>
+		<url>https://github.com/SemanticRecord/talaan.git</url>
+	</scm>
+	<developers>
+		<developer>
+			<email>rex.sheridan@semanticrecord.org</email>
+			<name>Rex Sheridan</name>
+		</developer>
+	</developers>
 </project>
