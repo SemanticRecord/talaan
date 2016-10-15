@@ -31,7 +31,7 @@ public final class SemanticLoggerConfig {
 	public static final String PROPERTIES_FILE = "talaan.properties";
 	public static final String LOG_PLACEHOLDER = "{}";
 	public static final String PAIR_FORMAT_DEFAULT = "%s=%s";
-	public static final String EVENT_ID_DEFAULT = "event_id";
+	public static final String EVENT_ID_DEFAULT = "eventId";
 	public static final String EVENT_NAME_DEFAULT = "event";
 	public static final String SEPARATOR_DEFAULT = ", ";
 
