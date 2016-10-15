@@ -7,14 +7,14 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.semanticrecord.talaan.LogMessage.Level;
 import org.slf4j.Logger;
@@ -57,8 +57,11 @@ public class SemanticLogger {
 		Class<?>[] interfaces = new Class<?>[] { logInterface };
 		Logger log = LoggerFactory.getLogger(loggerName);
 
-		Map<Method, InvocationHandler> methodMap = declaredMethodsList.stream()
-				.collect(Collectors.toMap(m -> m, m -> createLoggingHandler(log, m)));
+		Map<Method, InvocationHandler> methodMap = new HashMap<>();
+		for(Method m : declaredMethodsList) {
+			methodMap.put(m, createLoggingHandler(log, m));
+		}
+		
 		InvocationHandler h = createDispatchingHandler(methodMap);
 
 		@SuppressWarnings("unchecked")
@@ -104,33 +107,21 @@ public class SemanticLogger {
 	}
 
 	private static String generateFormatString(String eventName, String code, List<Parameter> parametersList) {
-		List<String> allParts = new ArrayList<>();
 		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
 		String format = config.getPairFormat();
-		allParts.add(formatPair(format, config.getEvent(), eventName));
-		if (!code.isEmpty()) {
-			allParts.add(formatPair(format, config.getCode(), code));
-		}
-		List<String> formattedParams = parametersList.stream()
-				.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
-				.map(p -> formatPair(format, p.getName(), config.getPlaceholder())).collect(Collectors.toList());
-		allParts.addAll(formattedParams);
+		
+		String logMessage = Stream.concat(
+		Stream.<String>builder()
+		.add(formatPair(format, config.getEvent(), eventName))
+		.add(code.isEmpty() ? "" : formatPair(format, config.getCode(), code))
+		.build(),
+		parametersList.stream()
+		.filter(p ->  !Throwable.class.isAssignableFrom(p.getType()))
+		.map(p -> formatPair(format, p.getName(), config.getPlaceholder())))
+		.filter(part -> !part.isEmpty())
+		.collect(Collectors.joining(config.getSeparator()));
 
-		String logMessage = join(config.getSeparator(), allParts);
 		return logMessage;
-	}
-
-	private static String join(String separator, Iterable<String> partsIterable) {
-		Iterator<String> parts = partsIterable.iterator();
-		StringBuilder builder = new StringBuilder();
-		if (parts.hasNext()) {
-			builder.append(parts.next().toString());
-			while (parts.hasNext()) {
-				builder.append(separator);
-				builder.append(parts.next().toString());
-			}
-		}
-		return builder.toString();
 	}
 
 	private static String formatPair(String format, Object o1, Object o2) {
