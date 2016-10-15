@@ -20,7 +20,7 @@ public interface SampleLoggerInterface {
 	@LogMessage("saved invoice summary")
 	void updatedInvoice(String invoiceTitle, long invoiceId, int detailsRowsCount, Stopwatch elapsedTime);
 
-	@LogMessage(level = Level.ERROR, code = "INVOICEAPP-1001")
+	@LogMessage(level = Level.ERROR, eventId = "INVOICEAPP-1001")
 	void problemSavingRecord(long invoiceId, Stopwatch elapsedTime, Throwable t);
 
 

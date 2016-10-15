@@ -26,16 +26,19 @@ public @interface LogMessage {
 	/**
 	 * Specifies the event name. Defaults to the method name used by the
 	 * interface
+	 * @return the event name
 	 */
 	String value() default "";
 
 	/**
 	 * Specifies the log level to use
+	 * @return the logging level used to log the statement
 	 */
 	Level level() default Level.INFO;
 
 	/**
 	 * Allows for a specific message code to be applied to each message
+	 * @return the event_id to attach to the log entry
 	 */
-	String code() default "";
+	String eventId() default "";
 }

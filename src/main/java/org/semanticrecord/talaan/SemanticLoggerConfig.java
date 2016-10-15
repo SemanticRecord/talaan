@@ -31,14 +31,14 @@ public final class SemanticLoggerConfig {
 	public static final String PROPERTIES_FILE = "talaan.properties";
 	public static final String LOG_PLACEHOLDER = "{}";
 	public static final String PAIR_FORMAT_DEFAULT = "%s=%s";
-	public static final String CODE_NAME_DEFAULT = "code";
+	public static final String EVENT_ID_DEFAULT = "event_id";
 	public static final String EVENT_NAME_DEFAULT = "event";
 	public static final String SEPARATOR_DEFAULT = ", ";
 
 	public static final String PREFIX_LOG_FORMAT = "log_format.";
 	public static final String PROP_LOG_PLACE_HOLDER = PREFIX_LOG_FORMAT + "placeholder";
 	public static final String PROP_PAIR_FORMAT = PREFIX_LOG_FORMAT + "pair_format";
-	public static final String PROP_CODE_NAME = PREFIX_LOG_FORMAT + "code_name";
+	public static final String PROP_EVENT_ID = PREFIX_LOG_FORMAT + "event_id";
 	public static final String PROP_EVENT_NAME = PREFIX_LOG_FORMAT + "event_name";
 	public static final String PROP_SEPARATOR = PREFIX_LOG_FORMAT + "separator";
 
@@ -89,7 +89,7 @@ public final class SemanticLoggerConfig {
 	}
 
 	public static Set<String> getPropertyKeys() {
-		List<String> propsList = Arrays.asList(PROP_CODE_NAME, PROP_EVENT_NAME, PROP_LOG_PLACE_HOLDER, PROP_PAIR_FORMAT,
+		List<String> propsList = Arrays.asList(PROP_EVENT_ID, PROP_EVENT_NAME, PROP_LOG_PLACE_HOLDER, PROP_PAIR_FORMAT,
 				PROP_SEPARATOR);
 		Set<String> propsSet = new HashSet<>(propsList);
 		return Collections.unmodifiableSet(propsSet);
@@ -115,8 +115,8 @@ public final class SemanticLoggerConfig {
 		return props.getOrDefault(PROP_SEPARATOR, SEPARATOR_DEFAULT);
 	}
 
-	public String getCode() {
-		return props.getOrDefault(PROP_CODE_NAME, CODE_NAME_DEFAULT);
+	public String getEventId() {
+		return props.getOrDefault(PROP_EVENT_ID, EVENT_ID_DEFAULT);
 	}
 
 	@Override

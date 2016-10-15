@@ -35,6 +35,9 @@ public class SemanticLogger {
 	 * 
 	 * @param logInterface
 	 *            to interface for which we will generate logging statements
+	 * @param <T>
+	 *            the interface to be implemented by the generated proxy in
+	 *            order to log events
 	 * @return a proxied implementation of logInterface which logs invocations
 	 */
 	public static <T> T getLogger(Class<T> logInterface) {
@@ -47,7 +50,10 @@ public class SemanticLogger {
 	 * 
 	 * @param logInterface
 	 *            returned proxy will adhere this interface
-	 * @param loggerName
+	 * @param loggerName the logger category to be passed to the SLFJ LoggerFactory
+	 * @param <T>
+	 *            the interface to be implemented by the generated proxy in
+	 *            order to log events
 	 * @return a proxied implementation of logInterface which logs invocations
 	 */
 	public static <T> T getLogger(Class<T> logInterface, Class<?> loggerName) {
@@ -88,7 +94,7 @@ public class SemanticLogger {
 		String eventName = message.value().isEmpty() ? method.getName() : message.value();
 		Parameter[] parameters = method.getParameters();
 		List<Parameter> parametersList = Arrays.asList(parameters);
-		String logMessage = generateFormatString(eventName, message.code(), parametersList);
+		String logMessage = generateFormatString(eventName, message.eventId(), parametersList);
 		BiConsumer<String, Object[]> biCons = getLevelMethod(log, message.level());
 
 		InvocationHandler h = (Object proxy, Method m2, Object[] args) -> {
@@ -118,7 +124,7 @@ public class SemanticLogger {
 		String logMessage = Stream.concat(
 		Stream.<String>builder()
 		.add(formatPair(format, config.getEvent(), eventName))
-		.add(code.isEmpty() ? "" : formatPair(format, config.getCode(), code))
+		.add(code.isEmpty() ? "" : formatPair(format, config.getEventId(), code))
 		.build(),
 		parametersList.stream()
 		.filter(p ->  !Throwable.class.isAssignableFrom(p.getType()))

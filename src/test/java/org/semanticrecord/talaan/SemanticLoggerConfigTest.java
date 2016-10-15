@@ -70,7 +70,7 @@ public class SemanticLoggerConfigTest {
 			Thread.currentThread().setContextClassLoader(cl);
 			SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
 			assertThat(config.isLoadedFromFile()).isTrue();
-			assertThat(config.getCode()).isEqualTo(expectedValue);
+			assertThat(config.getEventId()).isEqualTo(expectedValue);
 			assertThat(config.getEvent()).isEqualTo(expectedValue);
 			assertThat(config.getPairFormat()).isEqualTo(expectedValue);
 			assertThat(config.getPlaceholder()).isEqualTo(expectedValue);

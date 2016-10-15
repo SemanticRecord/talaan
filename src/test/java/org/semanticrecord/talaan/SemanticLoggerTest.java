@@ -96,7 +96,7 @@ public class SemanticLoggerTest {
 			logger.problemSavingRecord(1, elapsedTime.stop(), e);
 		}
 		assertSingleEvent(event -> {
-			String msg = "event=problemSavingRecord, code=INVOICEAPP-1001, invoiceId={}, elapsedTime={}";
+			String msg = "event=problemSavingRecord, event_id=INVOICEAPP-1001, invoiceId={}, elapsedTime={}";
 			String eventMessage = event.getMessage();
 			assertThat(eventMessage).isEqualTo(msg);
 			
