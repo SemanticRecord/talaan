@@ -36,6 +36,13 @@ public class SemanticLoggerConfigTest {
 	}
 	
 	@Test
+	public void getInstanceIsSingleton() {
+		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
+		SemanticLoggerConfig config2 = SemanticLoggerConfig.getInstance();
+		assertThat(config).isSameAs(config2);
+	}
+	
+	@Test
 	public void getInstanceWithFile() {
 		
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
