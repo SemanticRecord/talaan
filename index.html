@@ -26,7 +26,7 @@
 
 <p>Build status: <a href="https://travis-ci.org/SemanticRecord/talaan" title="Travis CI Build"><img src="https://travis-ci.org/SemanticRecord/talaan.svg?branch=master" alt="Build Status"></a></p>
 
-<p>Talaan is a simple wrapper for SLF4J based loggers which adds the ability to
+<p>Talaan is a simple wrapper for <a href="http://www.slf4j.org/">SLF4J</a> based loggers which adds the ability to
 generate log statements by calling Java interface methods instead of having
 strings scattered throughout your codebase. In addition, the library promotes
 structured, strongly-typed, semantic logging instead of the more common
@@ -58,7 +58,7 @@ logger<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"<
 <div class="highlight highlight-text-shell-session"><pre><span class="pl-mo">  INFO event=lookupInvoices, user=Rick Grimes, businessDate=2016-07-01, company=Alexandria</span></pre></div>
 
 <p>The preceding example makes logging statements consistent and easier to parse
-but we still end up with a bunch of strings scattered over our code base. If we
+but we still end up with a bunch of strings scattered over our code base.  We also must remain disciplined across the codebase if we want logging statements which will be easily consumed by our log analysis tools.  If we
 had an interface that we could call with strongly typed arguments then the
 logging statement and its parameters can be derived automatically. </p>
 
@@ -76,7 +76,7 @@ logger<span class="pl-k">.</span>lookupInvoices(user, businessDate, company);</p
 <li>Consistent formatting in log statements</li>
 <li>Easier refactoring</li>
 <li>Logging methods centralized into a single place</li>
-<li>Find callers of the logging statement</li>
+<li>Find callers of the logging statement across your project</li>
 <li>Strong types help promote less defects</li>
 <li>The possibility to mock the logging interface allows for fine-grained verification of the code</li>
 </ul>
@@ -118,6 +118,13 @@ to the following should suffice:</p>
             &lt;/<span class="pl-ent">compilerArgs</span>&gt;
         &lt;/<span class="pl-ent">configuration</span>&gt;
     &lt;/<span class="pl-ent">plugin</span>&gt;</pre></div>
+
+<h2>
+<a id="similar-work" class="anchor" href="#similar-work" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Similar Work</h2>
+
+<p>This project was inspired by the <a href="https://developer.jboss.org/wiki/JBossLoggingTooling">JBoss Logging Tools</a> project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.</p>
+
+<p>There is also <a href="https://github.com/UnquietCode/LogMachine">LogMachine</a> which takes a <a href="https://en.wikipedia.org/wiki/Fluent_interface">Fluent API</a> approach.  LogMachine also provides extra formatting syntax and an interesting Topic-based logging functionality.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SemanticRecord/talaan">Talaan</a> is maintained by <a href="https://github.com/SemanticRecord">SemanticRecord</a>.</span>
