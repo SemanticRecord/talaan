@@ -88,12 +88,12 @@ logger<span class="pl-k">.</span>lookupInvoices(user, businessDate, company);</p
 log statements with specific application codes.  Throwable's stack traces can also be included by 
 adding the throwable as the last parameter to the method signature.  For example:</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-k">@LogMessage</span>(<span class="pl-c1">level</span> <span class="pl-k">=</span> <span class="pl-smi">Level</span><span class="pl-c1"><span class="pl-k">.</span>ERROR</span>, <span class="pl-c1">code</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>INVOICEAPP-1001<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-source-java"><pre><span class="pl-k">@LogMessage</span>(<span class="pl-c1">level</span> <span class="pl-k">=</span> <span class="pl-smi">Level</span><span class="pl-c1"><span class="pl-k">.</span>ERROR</span>, <span class="pl-c1">eventId</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>INVOICEAPP-1001<span class="pl-pds">"</span></span>)
 <span class="pl-k">void</span> problemSavingRecord(<span class="pl-k">long</span> invoiceId, <span class="pl-smi">Stopwatch</span> elapsedTime, <span class="pl-smi">Throwable</span> t);</pre></div>
 
 <p>Will be output similarly to:</p>
 
-<div class="highlight highlight-text-shell-session"><pre><span class="pl-mo">ERROR event=problemSavingRecord, code=INVOICEAPP-1001, invoiceId=1, elapsedTime=61.61 μs</span>
+<div class="highlight highlight-text-shell-session"><pre><span class="pl-mo">ERROR event=problemSavingRecord, event_id=INVOICEAPP-1001, invoiceId=1, elapsedTime=61.61 μs</span>
 <span class="pl-mo">java.lang.RuntimeException: Expected exception message</span>
 <span class="pl-mo">    at org.semanticrecord.talaan.SemanticLoggerTest.testThrowable(SemanticLoggerTest.java:92)</span>
 <span class="pl-mo">    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span>
