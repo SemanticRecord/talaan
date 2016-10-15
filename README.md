@@ -68,13 +68,13 @@ log statements with specific application codes.  Throwable's stack traces can al
 adding the throwable as the last parameter to the method signature.  For example:
 
 ```java
-@LogMessage(level = Level.ERROR, code = "INVOICEAPP-1001")
+@LogMessage(level = Level.ERROR, eventId = "INVOICEAPP-1001")
 void problemSavingRecord(long invoiceId, Stopwatch elapsedTime, Throwable t);
 ```	
 
 Will be output similarly to:
 ```console
-ERROR event=problemSavingRecord, code=INVOICEAPP-1001, invoiceId=1, elapsedTime=61.61 μs
+ERROR event=problemSavingRecord, event_id=INVOICEAPP-1001, invoiceId=1, elapsedTime=61.61 μs
 java.lang.RuntimeException: Expected exception message
 	at org.semanticrecord.talaan.SemanticLoggerTest.testThrowable(SemanticLoggerTest.java:92)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
