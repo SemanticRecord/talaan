@@ -38,7 +38,7 @@ Output will be:
 ```
 
 The preceding example makes logging statements consistent and easier to parse
-but we still end up with a bunch of strings scattered over our code base. If we
+but we still end up with a bunch of strings scattered over our code base.  We also must remain disciplined across the codebase if we want logging statements which will be easily consumed by our log analysis tools.  If we
 had an interface that we could call with strongly typed arguments then the
 logging statement and its parameters can be derived automatically. 
 
@@ -57,7 +57,7 @@ The advantages you get from such an approach are the following:
 * Consistent formatting in log statements
 * Easier refactoring
 * Logging methods centralized into a single place
-* Find callers of the logging statement
+* Find callers of the logging statement across your project
 * Strong types help promote less defects
 * The possibility to mock the logging interface allows for fine-grained verification of the code
 
