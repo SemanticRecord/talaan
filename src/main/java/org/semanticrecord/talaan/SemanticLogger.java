@@ -34,28 +34,33 @@ public class SemanticLogger {
 
 	/**
 	 * Uses the logInterface class as the name of the logger.
-	 * @param logInterface to interface for which we will generate logging statements
-	 * @return a proxied implementation of logInterface which logs invocations 
+	 * 
+	 * @param logInterface
+	 *            to interface for which we will generate logging statements
+	 * @return a proxied implementation of logInterface which logs invocations
 	 */
 	public static <T> T getLogger(Class<T> logInterface) {
 		return getLogger(logInterface, logInterface);
 	}
 
 	/**
-	 * @param logInterface
+	 * Allows the logging interface to be reused by multiple classes while each
+	 * class maintains their own logger name.
+	 * 
+	 * @param logInterface returned proxy will adhere this interface
 	 * @param loggerName
-	 * @return
+	 * @return a proxied implementation of logInterface which logs invocations
 	 */
 	public static <T> T getLogger(Class<T> logInterface, Class<?> loggerName) {
 		return getLogger(logInterface, loggerName.getName());
 	}
 
 	public static <T> T getLogger(Class<T> logInterface, String loggerName) {
-		
+
 		Method[] declaredMethods = logInterface.getDeclaredMethods();
 		List<Method> declaredMethodsList = Arrays.asList(declaredMethods);
 		ClassLoader classLoader = logInterface.getClassLoader();
-		Class<?>[] interfaces = new Class<?>[] {logInterface};
+		Class<?>[] interfaces = new Class<?>[] { logInterface };
 		Logger log = LoggerFactory.getLogger(loggerName);
 
 		Map<Method, InvocationHandler> methodMap = declaredMethodsList.stream()
@@ -88,11 +93,12 @@ public class SemanticLogger {
 			biCons.accept(logMessage, args);
 			return Void.TYPE;
 		};
- 		return h;
+		return h;
 	}
 
 	@LogMessage
-	private static void defaultMessage() {}
+	private static void defaultMessage() {
+	}
 
 	private static LogMessage getDefaultMessageAnnotation() {
 		try {
@@ -108,13 +114,12 @@ public class SemanticLogger {
 		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
 		String format = config.getPairFormat();
 		allParts.add(formatPair(format, config.getEvent(), eventName));
-		if(!code.isEmpty()) {
+		if (!code.isEmpty()) {
 			allParts.add(formatPair(format, config.getCode(), code));
 		}
 		List<String> formattedParams = parametersList.stream()
-										.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
-										.map(p -> formatPair(format, p.getName(), config.getPlaceholder()))
-										.collect(Collectors.toList());
+				.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
+				.map(p -> formatPair(format, p.getName(), config.getPlaceholder())).collect(Collectors.toList());
 		allParts.addAll(formattedParams);
 
 		String logMessage = join(config.getSeparator(), allParts);
@@ -125,12 +130,12 @@ public class SemanticLogger {
 		Iterator<String> parts = partsIterable.iterator();
 		StringBuilder builder = new StringBuilder();
 		if (parts.hasNext()) {
-		      builder.append(parts.next().toString());
-		      while (parts.hasNext()) {
-		        builder.append(separator);
-		        builder.append(parts.next().toString());
-		      }
-		    }
+			builder.append(parts.next().toString());
+			while (parts.hasNext()) {
+				builder.append(separator);
+				builder.append(parts.next().toString());
+			}
+		}
 		return builder.toString();
 	}
 
@@ -140,11 +145,11 @@ public class SemanticLogger {
 
 	private static BiConsumer<String, Object[]> getLevelMethod(final Logger log, Level level) {
 		BiConsumer<String, Object[]> biCons = log::error;
-		if(level == Level.DEBUG) {
+		if (level == Level.DEBUG) {
 			biCons = log::debug;
-		} else if(level == Level.INFO) {
+		} else if (level == Level.INFO) {
 			biCons = log::info;
-		} else if(level == Level.WARN) {
+		} else if (level == Level.WARN) {
 			biCons = log::warn;
 		}
 		return biCons;
