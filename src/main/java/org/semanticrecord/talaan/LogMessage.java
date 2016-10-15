@@ -9,17 +9,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Used to annotate a method on a logging interface and customize the output of
+ * the log entry.
+ * 
  * @author Rex Sheridan
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value=ElementType.METHOD)
+@Target(value = ElementType.METHOD)
 public @interface LogMessage {
 
-	public enum Level {DEBUG, INFO, WARN, ERROR};
+	public enum Level {
+		DEBUG, INFO, WARN, ERROR
+	};
 
 	/**
-	 * Specifies the event name.  Defaults to the method name used by the interface
+	 * Specifies the event name. Defaults to the method name used by the
+	 * interface
 	 */
 	String value() default "";
 

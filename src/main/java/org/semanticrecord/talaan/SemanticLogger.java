@@ -21,6 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Provides a way to wrap an SLF4J Logger with an object implementing an
+ * interface you supply and which generates log entries based on the methods
+ * called on that interface.
+ * 
  * @author Rex Sheridan
  *
  */
@@ -41,7 +45,8 @@ public class SemanticLogger {
 	 * Allows the logging interface to be reused by multiple classes while each
 	 * class maintains their own logger name.
 	 * 
-	 * @param logInterface returned proxy will adhere this interface
+	 * @param logInterface
+	 *            returned proxy will adhere this interface
 	 * @param loggerName
 	 * @return a proxied implementation of logInterface which logs invocations
 	 */
@@ -58,10 +63,10 @@ public class SemanticLogger {
 		Logger log = LoggerFactory.getLogger(loggerName);
 
 		Map<Method, InvocationHandler> methodMap = new HashMap<>();
-		for(Method m : declaredMethodsList) {
+		for (Method m : declaredMethodsList) {
 			methodMap.put(m, createLoggingHandler(log, m));
 		}
-		
+
 		InvocationHandler h = createDispatchingHandler(methodMap);
 
 		@SuppressWarnings("unchecked")
@@ -120,7 +125,7 @@ public class SemanticLogger {
 		.map(p -> formatPair(format, p.getName(), config.getPlaceholder())))
 		.filter(part -> !part.isEmpty())
 		.collect(Collectors.joining(config.getSeparator()));
-
+		
 		return logMessage;
 	}
 

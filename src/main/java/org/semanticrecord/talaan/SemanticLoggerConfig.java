@@ -18,7 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Rex Sheridan <rex.sheridan@semanticrecord.org>
+ * Provides the logger with a set of parameters to control the format of logging
+ * statements. If a file named <code>talaan.properties</code> is supplied on the
+ * classpath the values from that file will be used to override the format.
+ * 
+ * @author Rex Sheridan
  *
  */
 public final class SemanticLoggerConfig {
