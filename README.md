@@ -104,4 +104,4 @@ to the following should suffice:
 ```
 
 ## Similar Work
-This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which also takes an annotation based approach as well.  It provides additional functionality such as internationalization (i18n) support.
+This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It provides additional functionality such as internationalization (i18n) support.
