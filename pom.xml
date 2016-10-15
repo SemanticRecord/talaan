@@ -53,8 +53,8 @@
 	<inceptionYear>2016</inceptionYear>
 	<licenses>
 		<license>
-			<name>MIT License</name>
-			<url>https://github.com/SemanticRecord/talaan/blob/master/LICENSE.md</url>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
