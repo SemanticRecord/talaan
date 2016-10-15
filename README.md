@@ -3,7 +3,7 @@ Semantic logging in Java over SLF4J
 
 Build status: [![Build Status] (https://travis-ci.org/SemanticRecord/talaan.svg?branch=master)](https://travis-ci.org/SemanticRecord/talaan "Travis CI Build")
 
-Talaan is a simple wrapper for SLF4J based loggers which adds the ability to
+Talaan is a simple wrapper for [SLF4J] (http://www.slf4j.org/) based loggers which adds the ability to
 generate log statements by calling Java interface methods instead of having
 strings scattered throughout your codebase. In addition, the library promotes
 structured, strongly-typed, semantic logging instead of the more common
@@ -102,3 +102,6 @@ to the following should suffice:
 		</configuration>
 	</plugin>
 ```
+
+## Similar Work
+This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.
