@@ -51,6 +51,7 @@ public class SemanticLogger {
 	}
 
 	public static <T> T getLogger(Class<T> logInterface, String loggerName) {
+		
 		Method[] declaredMethods = logInterface.getDeclaredMethods();
 		List<Method> declaredMethodsList = Arrays.asList(declaredMethods);
 		ClassLoader classLoader = logInterface.getClassLoader();
@@ -58,7 +59,7 @@ public class SemanticLogger {
 		Logger log = LoggerFactory.getLogger(loggerName);
 
 		Map<Method, InvocationHandler> methodMap = declaredMethodsList.stream()
-				.collect(Collectors.toMap(m -> m, m -> createHandler(log, m)));
+				.collect(Collectors.toMap(m -> m, m -> createLoggingHandler(log, m)));
 		InvocationHandler h = createDispatchingHandler(methodMap);
 
 		@SuppressWarnings("unchecked")
@@ -73,10 +74,7 @@ public class SemanticLogger {
 		return h;
 	}
 
-	@LogMessage
-	private static void defaultMessage() {}
-
-	private static InvocationHandler createHandler(final Logger log, Method method) {
+	private static InvocationHandler createLoggingHandler(final Logger log, Method method) {
 		LogMessage defaultMessage = getDefaultMessageAnnotation();
 		LogMessage message = Optional.ofNullable(method.getAnnotation(LogMessage.class)).orElse(defaultMessage);
 
@@ -93,6 +91,9 @@ public class SemanticLogger {
  		return h;
 	}
 
+	@LogMessage
+	private static void defaultMessage() {}
+
 	private static LogMessage getDefaultMessageAnnotation() {
 		try {
 			Method defaultMethod = SemanticLogger.class.getDeclaredMethod("defaultMessage");
@@ -104,18 +105,19 @@ public class SemanticLogger {
 
 	private static String generateFormatString(String eventName, String code, List<Parameter> parametersList) {
 		List<String> allParts = new ArrayList<>();
-
-		allParts.add(formatPair(EVENT_DEFAULT, eventName));
+		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
+		String format = config.getPairFormat();
+		allParts.add(formatPair(format, config.getEvent(), eventName));
 		if(!code.isEmpty()) {
-			allParts.add(formatPair(CODE_PARAM_DEFAULT, code));
+			allParts.add(formatPair(format, config.getCode(), code));
 		}
 		List<String> formattedParams = parametersList.stream()
 										.filter(p -> !Throwable.class.isAssignableFrom(p.getType()))
-										.map(p -> formatPair(p.getName(), LOG_PLACEHOLDER))
+										.map(p -> formatPair(format, p.getName(), config.getPlaceholder()))
 										.collect(Collectors.toList());
 		allParts.addAll(formattedParams);
 
-		String logMessage = join(SEPARATOR_DEFAULT, allParts);
+		String logMessage = join(config.getSeparator(), allParts);
 		return logMessage;
 	}
 
@@ -132,9 +134,8 @@ public class SemanticLogger {
 		return builder.toString();
 	}
 
-	private static String formatPair(Object o1, Object o2) {
-		String fmt = PAIR_FORMAT_DEFAULT;
-		return String.format(fmt, o1, o2);
+	private static String formatPair(String format, Object o1, Object o2) {
+		return String.format(format, o1, o2);
 	}
 
 	private static BiConsumer<String, Object[]> getLevelMethod(final Logger log, Level level) {
