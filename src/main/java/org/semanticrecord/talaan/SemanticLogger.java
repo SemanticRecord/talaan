@@ -26,12 +26,6 @@ import org.slf4j.LoggerFactory;
  */
 public class SemanticLogger {
 
-	public static final String LOG_PLACEHOLDER = "{}";
-	public static final String CODE_PARAM_DEFAULT = "code";
-	public static final String PAIR_FORMAT_DEFAULT = "%s=%s";
-	public static final String EVENT_DEFAULT = "event";
-	public static final String SEPARATOR_DEFAULT = ", ";
-
 	/**
 	 * Uses the logInterface class as the name of the logger.
 	 * 
