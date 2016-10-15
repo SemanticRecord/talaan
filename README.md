@@ -102,3 +102,6 @@ to the following should suffice:
 		</configuration>
 	</plugin>
 ```
+
+## Similar Work
+This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which also takes an annotation based approach as well.  It provides additional functionality such as internationalization (i18n) support.
