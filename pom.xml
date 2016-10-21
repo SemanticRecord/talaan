@@ -158,4 +158,5 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
+	<description>Semantic logging in Java over SLF4J</description>
 </project>
