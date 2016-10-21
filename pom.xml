@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.semanticrecord</groupId>
 	<artifactId>talaan</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>Talaan</name>
@@ -134,7 +134,7 @@
 		<developerConnection>scm:git:git@github.com:SemanticRecord/talaan.git</developerConnection>
 		<connection>scm:git:git://github.com/SemanticRecord/talaan.git</connection>
 		<url>https://github.com/SemanticRecord/talaan.git</url>
-	  <tag>HEAD</tag>
+	  <tag>talaan-0.0.3</tag>
   </scm>
 	<developers>
 		<developer>
