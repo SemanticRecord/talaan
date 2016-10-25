@@ -81,9 +81,17 @@ java.lang.RuntimeException: Expected exception message
 	...
 ```
 
-*Note:*
+## Usage
+To get started with Talaan you may simply add the following dependency to your [Maven] (https://maven.apache.org) build:
+```xml
+		<dependency>
+			<groupId>org.semanticrecord</groupId>
+			<artifactId>talaan</artifactId>
+			<version>0.0.5</version>
+		</dependency>
+```
 
-This project requires features from Java 8. In particular, in order to get
+This project requires features from Java 8. In order to get
 meaningful names for parameters declared on semantic logger interfaces you must
 compile with the `-parameters` flag turned on. If using Maven a snippet similar
 to the following should suffice:
@@ -102,6 +110,7 @@ to the following should suffice:
 		</configuration>
 	</plugin>
 ```
+If you have not configured the parameters argument your logging events will have parameter names like arg0, arg1, etc.
 
 ## Similar Work
 This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.
