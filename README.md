@@ -82,7 +82,7 @@ java.lang.RuntimeException: Expected exception message
 ```
 
 ## Usage
-To get started with Talaan you may simply add the following dependency to your [Maven] (https://maven.apache.org) build:
+To get started with Talaan you may simply add the following dependency to your [Maven](https://maven.apache.org) build:
 ```xml
 		<dependency>
 			<groupId>org.semanticrecord</groupId>
