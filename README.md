@@ -1,7 +1,7 @@
 # Talaan
 Structured logging in Java over SLF4J
 
-Build status: [![Build Status] (https://travis-ci.org/SemanticRecord/talaan.svg?branch=master)](https://travis-ci.org/SemanticRecord/talaan "Travis CI Build")
+Build status: [![Build Status](https://travis-ci.org/SemanticRecord/talaan.svg?branch=master)](https://travis-ci.org/SemanticRecord/talaan "Travis CI Build")
 
 Talaan is a simple wrapper for [SLF4J](http://www.slf4j.org/) based loggers which adds the ability to
 generate log statements by calling Java interface methods instead of having
