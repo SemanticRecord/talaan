@@ -3,7 +3,7 @@ Structured logging in Java over SLF4J
 
 Build status: [![Build Status] (https://travis-ci.org/SemanticRecord/talaan.svg?branch=master)](https://travis-ci.org/SemanticRecord/talaan "Travis CI Build")
 
-Talaan is a simple wrapper for [SLF4J] (http://www.slf4j.org/) based loggers which adds the ability to
+Talaan is a simple wrapper for [SLF4J](http://www.slf4j.org/) based loggers which adds the ability to
 generate log statements by calling Java interface methods instead of having
 strings scattered throughout your codebase. In addition, the library promotes
 structured, strongly-typed, meaningful logging instead of the more common
@@ -113,8 +113,8 @@ to the following should suffice:
 If you have not configured the parameters argument your logging events will have parameter names like arg0, arg1, etc.
 
 ## Similar Work
-This project was inspired by the [JBoss Logging Tools] (https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.
+This project was inspired by the [JBoss Logging Tools](https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.
 
-There is also [LogMachine] (https://github.com/UnquietCode/LogMachine) which takes a [Fluent API] (https://en.wikipedia.org/wiki/Fluent_interface) approach.  LogMachine also provides extra formatting syntax and an interesting Topic-based logging functionality.
+There is also [LogMachine](https://github.com/UnquietCode/LogMachine) which takes a [Fluent API](https://en.wikipedia.org/wiki/Fluent_interface) approach.  LogMachine also provides extra formatting syntax and an interesting Topic-based logging functionality.
 
-You can read a good background in the [Structured Logging] (https://kartar.net/2015/12/structured-logging/) article by James Turnbull.  The article uses JSON as the output encoding for the logging statements, which is a possible future enhancement for Talaan.
+You can read a good background in the [Structured Logging](https://kartar.net/2015/12/structured-logging/) article by James Turnbull.  The article uses JSON as the output encoding for the logging statements, which is a possible future enhancement for Talaan.
