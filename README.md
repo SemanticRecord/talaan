@@ -113,7 +113,11 @@ to the following should suffice:
 If you have not configured the parameters argument your logging events will have parameter names like arg0, arg1, etc.
 
 ## Future Directions
-In addition to simple key-value pairs the Talaan project could provide pluggable options to emit formats such as JSON or other user defined formats.  Feature requests and pull requests are welcome :)
+In addition to simple key-value pairs the Talaan project could provide pluggable options to emit formats such as JSON or other user defined formats.  
+
+In order to allow a phased migration from code using the existing [Logger](https://www.slf4j.org/xref/org/slf4j/Logger.html) API in SLF4J we could allow structured logger interfaces to extend Logger.  Code could call existing methods on the Logger interface and introduce structured versions over time.
+
+Feature requests and pull requests are welcome :)
 
 ## Similar Work
 This project was inspired by the [JBoss Logging Tools](https://developer.jboss.org/wiki/JBossLoggingTooling) project which takes an annotation based approach as well.  It differs from Talaan in that its primary focus seems to be on internationalization (i18n) support.  Talaan fulfills a different use case and requires no code generation.
