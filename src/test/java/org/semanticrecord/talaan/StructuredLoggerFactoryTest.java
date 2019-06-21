@@ -3,7 +3,13 @@ package org.semanticrecord.talaan;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.function.Consumer;
+
+import javax.json.Json;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,10 +30,10 @@ import uk.org.lidalia.slf4jtest.TestLoggerFactory;
  * @author Rex Sheridan
  *
  */
-public class SemanticLoggerTest {
+public class StructuredLoggerFactoryTest {
 
 	TestLogger testLogger = TestLoggerFactory.getTestLogger(SampleLoggerInterface.class);
-	SampleLoggerInterface logger = SemanticLogger.getLogger(SampleLoggerInterface.class);
+	SampleLoggerInterface logger = StructuredLoggerFactory.getLogger(SampleLoggerInterface.class);
 	
 	Stopwatch elapsedTime;
 	
@@ -44,6 +50,29 @@ public class SemanticLoggerTest {
 	@After
 	public void teardown() {
 		testLogger.clearAll();
+	}
+	
+	@Test
+	public void jsonOutput() {
+		JsonBuilderFactory factory = Json.createBuilderFactory(Collections.emptyMap());
+		JsonObject value = factory.createObjectBuilder()
+		     .add("firstName", "John")
+		     .add("lastName", "Smith")
+		     .add("age", 25)
+		     .add("address", factory.createObjectBuilder()
+		         .add("streetAddress", "21 2nd Street")
+		         .add("city", "New York")
+		         .add("state", "NY")
+		         .add("postalCode", "10021"))
+		     .add("phoneNumber", factory.createArrayBuilder()
+		         .add(factory.createObjectBuilder()
+		             .add("type", "home")
+		             .add("number", "212 555-1234"))
+		         .add(factory.createObjectBuilder()
+		             .add("type", "fax")
+		             .add("number", "646 555-4567")))
+		     .build();
+		logger.builtJsonObject(value.toString());
 	}
 
 	@Test

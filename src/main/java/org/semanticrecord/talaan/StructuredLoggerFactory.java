@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.semanticrecord.talaan.LogMessage.Level;
 import org.slf4j.Logger;
@@ -40,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author Rex Sheridan
  *
  */
-public class SemanticLogger {
+public class StructuredLoggerFactory {
 
 	/**
 	 * Uses the logInterface class as the name of the logger.
@@ -94,7 +92,8 @@ public class SemanticLogger {
 
 	private static InvocationHandler createDispatchingHandler(Map<Method, InvocationHandler> methodMap) {
 		InvocationHandler h = (Object proxy, Method method, Object[] args) -> {
-			return methodMap.get(method).invoke(proxy, method, args);
+			InvocationHandler methodHandler = methodMap.get(method);
+			return methodHandler.invoke(proxy, method, args);
 		};
 		return h;
 	}
@@ -106,14 +105,21 @@ public class SemanticLogger {
 		String eventName = message.value().isEmpty() ? method.getName() : message.value();
 		Parameter[] parameters = method.getParameters();
 		List<Parameter> parametersList = Arrays.asList(parameters);
-		String logMessage = generateFormatString(eventName, message.eventId(), parametersList);
+		FormatStringGenerator formatStringGenerator = getFormatStringGenerator();
+		String logMessage = formatStringGenerator.generateFormatString(eventName, message.eventId(), parametersList);
 		BiConsumer<String, Object[]> biCons = getLevelMethod(log, message.level());
 
 		InvocationHandler h = (Object proxy, Method m2, Object[] args) -> {
-			biCons.accept(logMessage, args);
+			if(message.level().isEnabled(log)) {				
+				biCons.accept(logMessage, args);
+			}
 			return Void.TYPE;
 		};
 		return h;
+	}
+	
+	static FormatStringGenerator getFormatStringGenerator() {
+		return new KeyValueFormatStringGenerator();
 	}
 
 	@LogMessage
@@ -122,33 +128,11 @@ public class SemanticLogger {
 
 	private static LogMessage getDefaultMessageAnnotation() {
 		try {
-			Method defaultMethod = SemanticLogger.class.getDeclaredMethod("defaultMessage");
+			Method defaultMethod = StructuredLoggerFactory.class.getDeclaredMethod("defaultMessage");
 			return defaultMethod.getAnnotation(LogMessage.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Could not access private method of our own class", e);
 		}
-	}
-
-	private static String generateFormatString(String eventName, String code, List<Parameter> parametersList) {
-		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
-		String format = config.getPairFormat();
-		
-		String logMessage = Stream.concat(
-		Stream.<String>builder()
-		.add(formatPair(format, config.getEvent(), eventName))
-		.add(code.isEmpty() ? "" : formatPair(format, config.getEventId(), code))
-		.build(),
-		parametersList.stream()
-		.filter(p ->  !Throwable.class.isAssignableFrom(p.getType()))
-		.map(p -> formatPair(format, p.getName(), config.getPlaceholder())))
-		.filter(part -> !part.isEmpty())
-		.collect(Collectors.joining(config.getSeparator()));
-		
-		return logMessage;
-	}
-
-	private static String formatPair(String format, Object o1, Object o2) {
-		return String.format(format, o1, o2);
 	}
 
 	private static BiConsumer<String, Object[]> getLevelMethod(final Logger log, Level level) {

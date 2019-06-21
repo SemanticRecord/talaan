@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
  * @author Rex Sheridan
  *
  */
-public final class SemanticLoggerConfig {
-	private static final Logger log = LoggerFactory.getLogger(SemanticLoggerConfig.class);
+public final class StructuredLoggerConfig {
+	private static final Logger log = LoggerFactory.getLogger(StructuredLoggerConfig.class);
 
 	public static final String PROPERTIES_FILE = "talaan.properties";
 	public static final String LOG_PLACEHOLDER = "{}";
@@ -54,19 +54,19 @@ public final class SemanticLoggerConfig {
 	public static final String PROP_EVENT_NAME = PREFIX_LOG_FORMAT + "event_name";
 	public static final String PROP_SEPARATOR = PREFIX_LOG_FORMAT + "separator";
 
-	private static AtomicReference<SemanticLoggerConfig> ref = new AtomicReference<>();
+	private static AtomicReference<StructuredLoggerConfig> ref = new AtomicReference<>();
 
 	private final Map<String, String> props;
 
 	private final boolean loadedFromFile;
 
-	private SemanticLoggerConfig(Map<String, String> props, boolean loadedFromFile) {
+	private StructuredLoggerConfig(Map<String, String> props, boolean loadedFromFile) {
 		this.props = props;
 		this.loadedFromFile = loadedFromFile;
 	}
 
-	public static SemanticLoggerConfig getInstance() {
-		SemanticLoggerConfig config = ref.get();
+	public static StructuredLoggerConfig getInstance() {
+		StructuredLoggerConfig config = ref.get();
 		if (config != null) {
 			return config;
 		}
@@ -83,7 +83,7 @@ public final class SemanticLoggerConfig {
 		}
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, String> propsMap = ((Map) props);
-		SemanticLoggerConfig newConfig = new SemanticLoggerConfig(Collections.unmodifiableMap(propsMap),
+		StructuredLoggerConfig newConfig = new StructuredLoggerConfig(Collections.unmodifiableMap(propsMap),
 				loadedFromFile);
 		boolean refWasSet = ref.compareAndSet(null, newConfig);
 		config = ref.get();
@@ -133,7 +133,7 @@ public final class SemanticLoggerConfig {
 
 	@Override
 	public String toString() {
-		return String.format("SemanticLoggerConfig [props=%s, loadedFromFile=%s]", props, loadedFromFile);
+		return String.format("StructuredLoggerConfig [props=%s, loadedFromFile=%s]", props, loadedFromFile);
 	}
 
 }

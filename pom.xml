@@ -18,7 +18,19 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.21</version>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+    		<groupId>javax.json</groupId>
+    		<artifactId>javax.json-api</artifactId>
+    		<version>1.0</version>
+    		<optional>true</optional>
+		</dependency>
+		<dependency>
+    		<groupId>org.glassfish</groupId>
+    		<artifactId>javax.json</artifactId>
+    		<version>1.0.4</version>
+    		<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

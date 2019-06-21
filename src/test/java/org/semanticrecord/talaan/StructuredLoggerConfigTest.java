@@ -15,7 +15,7 @@ import uk.org.lidalia.slf4jext.Level;
 import uk.org.lidalia.slf4jtest.TestLogger;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
-public class SemanticLoggerConfigTest {
+public class StructuredLoggerConfigTest {
 	
 	TestLogger testLogger = TestLoggerFactory.getTestLogger(SampleLoggerInterface.class);
 	
@@ -26,19 +26,19 @@ public class SemanticLoggerConfigTest {
 	
 	@After 
 	public void setup() {
-		SemanticLoggerConfig.reset();
+		StructuredLoggerConfig.reset();
 	}
 
 	@Test
 	public void getInstanceNoFile() {
-		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
+		StructuredLoggerConfig config = StructuredLoggerConfig.getInstance();
 		assertThat(config.isLoadedFromFile()).isFalse();
 	}
 	
 	@Test
 	public void getInstanceIsSingleton() {
-		SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
-		SemanticLoggerConfig config2 = SemanticLoggerConfig.getInstance();
+		StructuredLoggerConfig config = StructuredLoggerConfig.getInstance();
+		StructuredLoggerConfig config2 = StructuredLoggerConfig.getInstance();
 		assertThat(config).isSameAs(config2);
 	}
 	
@@ -48,7 +48,7 @@ public class SemanticLoggerConfigTest {
 		ByteArrayOutputStream bao = new ByteArrayOutputStream();
 		PrintWriter pWriter = new PrintWriter(bao);
 		String expectedValue = "value";
-		for(String key : SemanticLoggerConfig.getPropertyKeys()) {
+		for(String key : StructuredLoggerConfig.getPropertyKeys()) {
 			pWriter.format("%s=%s\n", key, expectedValue);			
 		}
 		pWriter.flush();
@@ -60,7 +60,7 @@ public class SemanticLoggerConfigTest {
 
 				@Override
 				public InputStream getResourceAsStream(String name) {
-					if(name.equals(SemanticLoggerConfig.PROPERTIES_FILE)) {
+					if(name.equals(StructuredLoggerConfig.PROPERTIES_FILE)) {
 						return new ByteArrayInputStream(bao.toByteArray());
 					}
 					return super.getResourceAsStream(name);
@@ -68,7 +68,7 @@ public class SemanticLoggerConfigTest {
 				
 			};
 			Thread.currentThread().setContextClassLoader(cl);
-			SemanticLoggerConfig config = SemanticLoggerConfig.getInstance();
+			StructuredLoggerConfig config = StructuredLoggerConfig.getInstance();
 			assertThat(config.isLoadedFromFile()).isTrue();
 			assertThat(config.getEventId()).isEqualTo(expectedValue);
 			assertThat(config.getEvent()).isEqualTo(expectedValue);

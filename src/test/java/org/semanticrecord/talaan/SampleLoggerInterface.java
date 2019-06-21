@@ -23,5 +23,7 @@ public interface SampleLoggerInterface {
 	@LogMessage(level = Level.ERROR, eventId = "INVOICEAPP-1001")
 	void problemSavingRecord(long invoiceId, Stopwatch elapsedTime, Throwable t);
 
+	void builtJsonObject(String jsonValue);
+
 
 }

@@ -19,6 +19,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Predicate;
+
+import org.slf4j.Logger;
 
 /**
  * Used to annotate a method on a logging interface and customize the output of
@@ -32,7 +35,22 @@ import java.lang.annotation.Target;
 public @interface LogMessage {
 
 	public enum Level {
-		DEBUG, INFO, WARN, ERROR
+		DEBUG((logger) -> logger.isDebugEnabled()), 
+		INFO((logger) -> logger.isInfoEnabled()), 
+		WARN((logger) -> logger.isWarnEnabled()), 
+		ERROR((logger) -> logger.isErrorEnabled());
+		private final Predicate<Logger> enabledPredicate;
+		private Level(Predicate<Logger> fn) {
+			this.enabledPredicate = fn;
+		}
+		
+		public Predicate<Logger> getEnabledPredicate() {
+			return enabledPredicate;
+		}
+		
+		public boolean isEnabled(Logger logger) {
+			return enabledPredicate.test(logger);
+		}
 	};
 
 	/**
